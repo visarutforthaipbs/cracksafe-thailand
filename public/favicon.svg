@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#2B4C7E"/>
+  <!-- Stylized crack -->
+  <path d="M12,8 Q16,12 14,16 T18,24" 
+        stroke="white" 
+        stroke-width="2.5"
+        fill="none"
+        stroke-linecap="round"/>
+  <!-- Measurement marks -->
+  <path d="M20,10 L22,10 M20,22 L22,22" 
+        stroke="white" 
+        stroke-width="1.5"
+        stroke-linecap="round"/>
+</svg> 
