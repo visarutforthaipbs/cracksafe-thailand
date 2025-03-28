@@ -1,51 +1,92 @@
 import React from "react";
 import {
+  Box,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Box,
-  Text,
+  Image,
+  VStack,
 } from "@chakra-ui/react";
-import { RiskAssessment } from "../types";
+import { AssessmentResult } from "../types";
 
-interface ResultDisplayProps {
-  assessment: RiskAssessment;
-}
-
-const riskLevelText = {
-  low: "ต่ำ",
-  moderate: "ปานกลาง",
-  high: "สูง",
+const getDamageLevelText = (level: AssessmentResult["damageLevel"]): string => {
+  switch (level) {
+    case "severe":
+      return "เสียหายรุนแรง";
+    case "moderate":
+      return "เสียหายปานกลาง";
+    case "no-minor":
+      return "ไม่มี/เสียหายเล็กน้อย";
+  }
 };
 
+interface ResultDisplayProps {
+  assessment: AssessmentResult;
+}
+
 const ResultDisplay: React.FC<ResultDisplayProps> = ({ assessment }) => {
+  if (!assessment) return null;
+
   return (
-    <Box>
-      <Alert
-        status={
-          assessment.level === "high"
-            ? "error"
-            : assessment.level === "moderate"
-            ? "warning"
-            : "success"
-        }
-        variant="subtle"
-        flexDirection="column"
-        alignItems="flex-start"
-        borderRadius="md"
-        p={4}
-      >
-        <AlertIcon boxSize="24px" mr={0} mb={2} />
-        <AlertTitle fontSize="lg" mb={2}>
-          ระดับความเสี่ยง: {riskLevelText[assessment.level]}
-        </AlertTitle>
-        <AlertDescription>
-          <Text fontSize="md" whiteSpace="pre-wrap">
+    <Box mt={8}>
+      <VStack spacing={6} align="stretch">
+        {assessment.imageUrl && (
+          <Box>
+            <Image
+              src={assessment.imageUrl}
+              alt="รอยร้าวที่ตรวจพบ"
+              maxH="300px"
+              borderRadius="md"
+              objectFit="contain"
+              mx="auto"
+            />
+          </Box>
+        )}
+
+        <Alert
+          status={
+            assessment.damageLevel === "severe"
+              ? "error"
+              : assessment.damageLevel === "moderate"
+              ? "warning"
+              : "success"
+          }
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="auto"
+          py={6}
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            {getDamageLevelText(assessment.damageLevel)}
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">
             {assessment.guidance}
-          </Text>
-        </AlertDescription>
-      </Alert>
+          </AlertDescription>
+        </Alert>
+
+        {assessment.additionalNote && (
+          <Alert
+            status="warning"
+            variant="subtle"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            height="auto"
+            py={4}
+          >
+            <AlertIcon boxSize="24px" mr={0} />
+            <AlertDescription maxWidth="sm">
+              {assessment.additionalNote}
+            </AlertDescription>
+          </Alert>
+        )}
+      </VStack>
     </Box>
   );
 };

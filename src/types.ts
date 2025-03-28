@@ -1,10 +1,4 @@
-export type CrackType =
-  | "vertical"
-  | "horizontal"
-  | "diagonal"
-  | "x-shaped"
-  | "step"
-  | "hairline";
+export type CrackType = "hairline" | "narrow" | "wide";
 
 export type CrackSize =
   | "hairline" // < 0.1 mm
@@ -12,29 +6,49 @@ export type CrackSize =
   | "medium" // 1.0-3.0 mm
   | "large"; // > 3.0 mm
 
+export type CrackPattern =
+  | "vertical"
+  | "horizontal"
+  | "diagonal"
+  | "spider-web"
+  | "other";
+
 export type Location =
-  | "foundation"
-  | "wall"
-  | "column-beam"
-  | "ceiling"
-  | "windows-doors";
+  | "beam"
+  | "column"
+  | "beam-column-joint"
+  | "shear-wall"
+  | "other";
 
 export type Length = "short" | "medium" | "long";
 
 export type RiskLevel = "low" | "moderate" | "high";
 
-export interface CrackData {
-  pattern: CrackType;
-  size: CrackSize;
-  width: number;
-  location: "wall" | "foundation" | "column-beam" | "ceiling" | "floor";
-  length: "short" | "medium" | "long";
-  isNew: boolean;
-  isGrowing: boolean;
+export interface Coordinates {
+  lat: number;
+  lng: number;
 }
 
-export interface RiskAssessment {
-  level: RiskLevel;
+export interface CrackAssessment {
+  location: Location;
+  pattern: CrackPattern;
+  width: number;
+  isNew: boolean;
+  isGrowing: boolean;
+  image?: File;
+  coordinates?: Coordinates;
+  description?: string;
+}
+
+export interface AssessmentResult {
+  damageLevel: "no-minor" | "moderate" | "severe";
   guidance: string;
-  color: string;
+  additionalNote?: string;
+  imageUrl?: string;
+  coordinates?: Coordinates;
+}
+
+export interface LocationMapProps {
+  coordinates?: Coordinates;
+  onLocationChange: (coordinates: Coordinates) => void;
 }

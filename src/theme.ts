@@ -10,16 +10,16 @@ const theme = extendTheme({
   },
   colors: {
     brand: {
-      50: "#E6F2FF",
-      100: "#B3D9FF",
-      200: "#80BFFF",
-      300: "#4DA6FF",
-      400: "#1A8CFF",
-      500: "#2C5282", // primary
-      600: "#234167",
-      700: "#1A314D",
-      800: "#122033",
-      900: "#0A101A",
+      50: "#e3f2fd",
+      100: "#bbdefb",
+      200: "#90caf9",
+      300: "#64b5f6",
+      400: "#42a5f5",
+      500: "#2196f3",
+      600: "#1e88e5",
+      700: "#1976d2",
+      800: "#1565c0",
+      900: "#0d47a1",
       secondary: "#ECC94B",
       accent: "#9B2C2C",
       neutral: {
@@ -30,8 +30,8 @@ const theme = extendTheme({
     },
   },
   fonts: {
-    heading: "'Noto Sans Thai', 'Inter', sans-serif",
-    body: "'Noto Sans Thai', 'Inter', sans-serif",
+    heading: "'Noto Sans Thai', sans-serif",
+    body: "'Noto Sans Thai', sans-serif",
   },
   fontSizes: {
     base: "16px",
