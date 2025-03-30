@@ -37,7 +37,6 @@ export interface CrackAssessment {
   isGrowing: boolean;
   image?: File;
   coordinates?: Coordinates;
-  description?: string;
   dataConsent: boolean;
 }
 

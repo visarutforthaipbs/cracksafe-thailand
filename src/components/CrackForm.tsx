@@ -87,7 +87,6 @@ const CrackForm: React.FC<CrackFormProps> = ({ onSubmit }) => {
       isGrowing: formData.isGrowing,
       image: formData.image,
       coordinates: formData.coordinates,
-      description: formData.description,
       dataConsent: formData.dataConsent,
     });
   };
