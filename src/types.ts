@@ -38,6 +38,7 @@ export interface CrackAssessment {
   image?: File;
   coordinates?: Coordinates;
   description?: string;
+  dataConsent: boolean;
 }
 
 export interface AssessmentResult {

@@ -61,6 +61,7 @@ const CrackForm: React.FC<CrackFormProps> = ({ onSubmit }) => {
     pattern: "vertical",
     isNew: false,
     isGrowing: false,
+    dataConsent: false,
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -78,7 +79,17 @@ const CrackForm: React.FC<CrackFormProps> = ({ onSubmit }) => {
       });
       return;
     }
-    onSubmit(formData);
+    onSubmit({
+      width: formData.width,
+      location: formData.location,
+      pattern: formData.pattern,
+      isNew: formData.isNew,
+      isGrowing: formData.isGrowing,
+      image: formData.image,
+      coordinates: formData.coordinates,
+      description: formData.description,
+      dataConsent: formData.dataConsent,
+    });
   };
 
   const handleImageChange = (file: File) => {
@@ -321,7 +332,24 @@ const CrackForm: React.FC<CrackFormProps> = ({ onSubmit }) => {
           </Checkbox>
         </SimpleGrid>
 
-        <Button type="submit" colorScheme="blue" size="lg">
+        <FormControl isRequired>
+          <Checkbox
+            isChecked={formData.dataConsent}
+            onChange={(e) =>
+              setFormData({ ...formData, dataConsent: e.target.checked })
+            }
+            colorScheme="blue"
+          >
+            ยินยอมให้เก็บข้อมูลเพื่อการวิเคราะห์และปรับปรุงระบบ
+          </Checkbox>
+        </FormControl>
+
+        <Button
+          type="submit"
+          colorScheme="blue"
+          size="lg"
+          isDisabled={!formData.dataConsent}
+        >
           ตรวจสอบ
         </Button>
       </VStack>
