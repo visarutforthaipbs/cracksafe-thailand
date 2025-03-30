@@ -36,7 +36,7 @@ const locationDescriptions: Record<Location, string> = {
   column: "เสา",
   "beam-column-joint": "จุดต่อระหว่างเสาและคาน",
   "shear-wall": "กำแพงรับแรงเฉือน",
-  other: "อื่นๆ",
+  floor: "พื้น",
 };
 
 const crackPatternDescriptions: Record<
@@ -47,7 +47,7 @@ const crackPatternDescriptions: Record<
   horizontal: { label: "รอยร้าวแนวนอน", image: horizontalCrack },
   diagonal: { label: "รอยร้าวแนวทแยง", image: diagonalCrack },
   "spider-web": { label: "รอยร้าวแบบใยแมงมุม", image: xShapedCrack },
-  other: { label: "รอยร้าวรูปแบบอื่นๆ", image: stepCrack },
+  step: { label: "รอยร้าวขั้นบันได", image: stepCrack },
 };
 
 interface CrackFormProps {

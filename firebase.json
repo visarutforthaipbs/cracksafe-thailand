@@ -1,0 +1,20 @@
+{
+  "functions": {
+    "source": "functions"
+  },
+  "emulators": {
+    "functions": {
+      "port": "5002"
+    },
+    "ui": {
+      "enabled": true,
+      "port": "4002"
+    },
+    "hub": {
+      "port": "4402"
+    },
+    "logging": {
+      "port": "4502"
+    }
+  }
+}

@@ -33,35 +33,54 @@ function App() {
   const toast = useToast();
 
   const handleAssessment = async (data: CrackAssessment) => {
-    // Check for critical factors first
     let risk: "high" | "moderate" | "low";
     let message: string;
 
+    // Check for severe damage first (high risk)
     if (
-      (data.location === "beam" && data.width >= 2) ||
-      (data.location === "column" && data.width >= 2) ||
-      (data.location === "beam-column-joint" && data.width >= 2) ||
-      (data.location === "shear-wall" && data.width >= 2) ||
-      (data.isNew && data.isGrowing && data.width >= 2)
+      (data.location === "beam" && data.width > 5) ||
+      (data.location === "column" && data.width > 2) ||
+      (data.location === "beam-column-joint" && data.width > 2) ||
+      (data.location === "shear-wall" && data.width > 2) ||
+      (data.location === "floor" && data.width > 5)
     ) {
       risk = "high";
       message =
         "พบความเสี่ยงสูง: กรุณาติดต่อวิศวกรโครงสร้างเพื่อตรวจสอบโดยด่วน";
-    } else if (
-      data.width >= 2 ||
-      (data.isNew && data.isGrowing) ||
-      (data.location === "beam" && data.width >= 1) ||
-      (data.location === "column" && data.width >= 1) ||
-      (data.location === "beam-column-joint" && data.width >= 1) ||
-      (data.location === "shear-wall" && data.width >= 1)
+    }
+    // Check for moderate damage
+    else if (
+      (data.location === "beam" && data.width >= 1 && data.width <= 5) ||
+      (data.location === "column" && data.width >= 0.2 && data.width <= 2) ||
+      (data.location === "beam-column-joint" &&
+        data.width >= 0.2 &&
+        data.width <= 2) ||
+      (data.location === "shear-wall" && data.width >= 1 && data.width <= 2) ||
+      (data.location === "floor" && data.width >= 1 && data.width <= 5)
     ) {
       risk = "moderate";
       message =
         "พบความเสี่ยงปานกลาง: ควรติดต่อผู้เชี่ยวชาญเพื่อตรวจสอบเพิ่มเติม";
-    } else {
+    }
+    // Low risk (no/minor damage)
+    else {
       risk = "low";
       message =
         "พบความเสี่ยงต่ำ: ควรติดตามสังเกตการณ์อย่างสม่ำเสมอ หากพบการเปลี่ยนแปลงให้ประเมินซ้ำ";
+    }
+
+    // Additional risk factors
+    if (data.isNew && data.isGrowing) {
+      // Upgrade risk level if crack is new and growing
+      if (risk === "low") {
+        risk = "moderate";
+        message =
+          "พบความเสี่ยงปานกลาง: รอยร้าวใหม่และมีการขยายตัว ควรติดต่อผู้เชี่ยวชาญเพื่อตรวจสอบเพิ่มเติม";
+      } else if (risk === "moderate") {
+        risk = "high";
+        message =
+          "พบความเสี่ยงสูง: รอยร้าวใหม่และมีการขยายตัว กรุณาติดต่อวิศวกรโครงสร้างเพื่อตรวจสอบโดยด่วน";
+      }
     }
 
     setAssessment({ risk, message });

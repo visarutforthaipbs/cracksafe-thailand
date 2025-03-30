@@ -11,14 +11,14 @@ export type CrackPattern =
   | "horizontal"
   | "diagonal"
   | "spider-web"
-  | "other";
+  | "step";
 
 export type Location =
   | "beam"
   | "column"
   | "beam-column-joint"
   | "shear-wall"
-  | "other";
+  | "floor";
 
 export type Length = "short" | "medium" | "long";
 
