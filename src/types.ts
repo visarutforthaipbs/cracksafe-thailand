@@ -38,6 +38,10 @@ export interface CrackAssessment {
   image?: File;
   coordinates?: Coordinates;
   dataConsent: boolean;
+  contactInfo?: {
+    name: string;
+    phone: string;
+  };
 }
 
 export interface AssessmentResult {

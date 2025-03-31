@@ -16,8 +16,13 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import CrackForm from "./components/CrackForm";
+import { ContactForm } from "./components/ContactForm";
 import { CrackAssessment } from "./types";
-import { createDocument, uploadFile } from "./services/firebase";
+import {
+  createDocument,
+  uploadFile,
+  updateDocument,
+} from "./services/firebase";
 import theme from "./theme";
 import NavBar from "./components/NavBar";
 
@@ -30,6 +35,10 @@ function App() {
     message: string;
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [currentAssessmentId, setCurrentAssessmentId] = useState<string | null>(
+    null
+  );
   const toast = useToast();
 
   const handleAssessment = async (data: CrackAssessment) => {
@@ -96,7 +105,6 @@ function App() {
       }
 
       // Create assessment document in Firestore
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { image, coordinates, ...assessmentDataWithoutImage } = data;
       const assessmentData = {
         ...assessmentDataWithoutImage,
@@ -109,7 +117,13 @@ function App() {
           : undefined,
       };
 
-      await createDocument("assessments", assessmentData);
+      const docRef = await createDocument("assessments", assessmentData);
+      setCurrentAssessmentId(docRef.id);
+
+      // Show contact form for high/moderate risk
+      if (risk === "high" || risk === "moderate") {
+        setShowContactForm(true);
+      }
 
       toast({
         title: "บันทึกข้อมูลสำเร็จ",
@@ -123,6 +137,37 @@ function App() {
       toast({
         title: "ไม่สามารถบันทึกข้อมูลได้",
         description: "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleContactSubmit = async (contactData: {
+    name: string;
+    phone: string;
+  }) => {
+    if (!currentAssessmentId) return;
+
+    try {
+      await updateDocument("assessments", currentAssessmentId, {
+        contactInfo: contactData,
+        updatedAt: new Date().toISOString(),
+      });
+
+      toast({
+        title: "ขอบคุณสำหรับข้อมูล",
+        description: "วิศวกรอาสาจะติดต่อกลับโดยเร็วที่สุด",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error saving contact info:", error);
+      toast({
+        title: "เกิดข้อผิดพลาด",
+        description: "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -269,6 +314,12 @@ function App() {
           </ModalBody>
         </ModalContent>
       </Modal>
+
+      <ContactForm
+        isOpen={showContactForm}
+        onClose={() => setShowContactForm(false)}
+        onSubmit={handleContactSubmit}
+      />
     </ChakraProvider>
   );
 }
