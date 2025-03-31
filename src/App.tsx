@@ -244,7 +244,7 @@ function App() {
                 ในกรณีฉุกเฉิน กรุณาติดต่อ:
               </Text>
               <Text fontSize="md" color="blue.600" fontWeight="bold">
-                สายด่วนวิศวกรอาสา: 1234
+                สายด่วนสภาวิศวกร: 1303
               </Text>
             </Box>
           </Center>
