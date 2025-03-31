@@ -240,7 +240,7 @@ function App() {
                 เรากำลังปรับปรุงระบบเพื่อพัฒนาประสิทธิภาพการให้บริการ
                 กรุณากลับมาใหม่ในภายหลัง
               </Text>
-              <Text fontSize="md" color="gray.500">
+              <Text fontSize="md" color="gray.500" mb={2}>
                 ในกรณีฉุกเฉิน กรุณาติดต่อ:
               </Text>
               <Text fontSize="md" color="blue.600" fontWeight="bold">
