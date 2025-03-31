@@ -13,6 +13,8 @@ import {
   VStack,
   Text,
   useToast,
+  Image,
+  Box,
 } from "@chakra-ui/react";
 
 interface ContactFormProps {
@@ -57,7 +59,17 @@ export function ContactForm({ isOpen, onClose, onSubmit }: ContactFormProps) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>ข้อมูลติดต่อสำหรับวิศวกรอาสา</ModalHeader>
+        <ModalHeader>
+          <Box display="flex" alignItems="center" gap={3}>
+            <Image
+              src="/1ae64123-4cd8-4244-ab3b-bda2351ccc38.jpeg"
+              alt="วิศวกรอาสา"
+              boxSize="40px"
+              objectFit="contain"
+            />
+            <Text>ข้อมูลติดต่อสำหรับวิศวกรอาสา</Text>
+          </Box>
+        </ModalHeader>
         <ModalBody>
           <VStack spacing={4}>
             <Text>
