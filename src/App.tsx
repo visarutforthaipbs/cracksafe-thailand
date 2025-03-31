@@ -14,6 +14,7 @@ import {
   Button,
   VStack,
   Icon,
+  Center,
 } from "@chakra-ui/react";
 import CrackForm from "./components/CrackForm";
 import { ContactForm } from "./components/ContactForm";
@@ -27,9 +28,17 @@ import theme from "./theme";
 import NavBar from "./components/NavBar";
 
 // Import icons
-import { WarningIcon, CheckCircleIcon, InfoIcon } from "@chakra-ui/icons";
+import {
+  WarningIcon,
+  CheckCircleIcon,
+  InfoIcon,
+  SettingsIcon,
+} from "@chakra-ui/icons";
 
 function App() {
+  // Maintenance mode flag
+  const isMaintenanceMode = true;
+
   const [assessment, setAssessment] = useState<{
     risk: "high" | "moderate" | "low";
     message: string;
@@ -105,7 +114,7 @@ function App() {
       }
 
       // Create assessment document in Firestore
-      const { image, coordinates, ...assessmentDataWithoutImage } = data;
+      const { coordinates, ...assessmentDataWithoutImage } = data;
       const assessmentData = {
         ...assessmentDataWithoutImage,
         risk,
@@ -118,10 +127,12 @@ function App() {
       };
 
       const docRef = await createDocument("assessments", assessmentData);
+      console.log("Created assessment with ID:", docRef.id);
       setCurrentAssessmentId(docRef.id);
 
       // Show contact form for high/moderate risk
       if (risk === "high" || risk === "moderate") {
+        console.log("Showing contact form for assessment:", docRef.id);
         setShowContactForm(true);
       }
 
@@ -148,13 +159,18 @@ function App() {
     name: string;
     phone: string;
   }) => {
-    if (!currentAssessmentId) return;
+    console.log("Submitting contact form for assessment:", currentAssessmentId);
+    if (!currentAssessmentId) {
+      console.error("No assessment ID found");
+      return;
+    }
 
     try {
       await updateDocument("assessments", currentAssessmentId, {
         contactInfo: contactData,
         updatedAt: new Date().toISOString(),
       });
+      console.log("Successfully updated assessment with contact info");
 
       toast({
         title: "ขอบคุณสำหรับข้อมูล",
@@ -200,6 +216,42 @@ function App() {
         return "gray.500";
     }
   };
+
+  if (isMaintenanceMode) {
+    return (
+      <ChakraProvider theme={theme}>
+        <Box minH="100vh" bg="gray.50">
+          <Center minH="100vh" p={4}>
+            <Box
+              maxW="600px"
+              w="100%"
+              bg="white"
+              p={8}
+              borderRadius="lg"
+              boxShadow="lg"
+              textAlign="center"
+            >
+              <Icon as={SettingsIcon} w={16} h={16} color="blue.500" mb={6} />
+              <Text fontSize="2xl" fontWeight="bold" mb={4}>
+                ระบบอยู่ระหว่างการปรับปรุง
+              </Text>
+              <Text fontSize="lg" color="gray.600" mb={6}>
+                ขออภัยในความไม่สะดวก
+                เรากำลังปรับปรุงระบบเพื่อพัฒนาประสิทธิภาพการให้บริการ
+                กรุณากลับมาใหม่ในภายหลัง
+              </Text>
+              <Text fontSize="md" color="gray.500">
+                ในกรณีฉุกเฉิน กรุณาติดต่อ:
+              </Text>
+              <Text fontSize="md" color="blue.600" fontWeight="bold">
+                สายด่วนวิศวกรอาสา: 1234
+              </Text>
+            </Box>
+          </Center>
+        </Box>
+      </ChakraProvider>
+    );
+  }
 
   return (
     <ChakraProvider theme={theme}>
