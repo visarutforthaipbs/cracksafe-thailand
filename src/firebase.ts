@@ -22,4 +22,10 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const analytics = getAnalytics(app);
 
+// IMPORTANT: We are explicitly NOT using Firebase emulators.
+// All data is saved to and read from the production Firestore database,
+// even when running locally in development mode.
+
+console.log("Firebase initialized with production configuration.");
+
 export default app;

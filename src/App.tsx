@@ -37,7 +37,7 @@ import {
 
 function App() {
   // Maintenance mode flag
-  const isMaintenanceMode = true;
+  const isMaintenanceMode = false;
 
   const [assessment, setAssessment] = useState<{
     risk: "high" | "moderate" | "low";
@@ -51,6 +51,8 @@ function App() {
   const toast = useToast();
 
   const handleAssessment = async (data: CrackAssessment) => {
+    console.log("Form submission data:", data);
+
     let risk: "high" | "moderate" | "low";
     let message: string;
 
@@ -110,13 +112,16 @@ function App() {
       if (data.image) {
         const timestamp = new Date().getTime();
         const imagePath = `assessments/${timestamp}_${data.image.name}`;
+        console.log("Uploading image:", imagePath);
         imageUrl = await uploadFile(imagePath, data.image);
+        console.log("Image uploaded successfully, URL:", imageUrl);
       }
 
-      // Create assessment document in Firestore
-      const { coordinates, ...assessmentDataWithoutImage } = data;
+      // Create assessment document in Firestore - explicitly exclude the image File object
+      const { image, coordinates, ...assessmentDataWithoutImageAndCoords } =
+        data;
       const assessmentData = {
-        ...assessmentDataWithoutImage,
+        ...assessmentDataWithoutImageAndCoords,
         risk,
         message,
         imageUrl,
@@ -126,6 +131,7 @@ function App() {
           : undefined,
       };
 
+      console.log("Saving to Firestore:", assessmentData);
       const docRef = await createDocument("assessments", assessmentData);
       console.log("Created assessment with ID:", docRef.id);
       setCurrentAssessmentId(docRef.id);
@@ -145,6 +151,7 @@ function App() {
       });
     } catch (error) {
       console.error("Error saving data:", error);
+      console.error("Error details:", JSON.stringify(error));
       toast({
         title: "ไม่สามารถบันทึกข้อมูลได้",
         description: "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง",
@@ -162,13 +169,21 @@ function App() {
     console.log("Submitting contact form for assessment:", currentAssessmentId);
     if (!currentAssessmentId) {
       console.error("No assessment ID found");
+      toast({
+        title: "เกิดข้อผิดพลาด",
+        description: "ไม่พบข้อมูลการประเมิน กรุณาลองใหม่อีกครั้ง",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       return;
     }
 
     try {
+      console.log("Contact data to save:", contactData);
       await updateDocument("assessments", currentAssessmentId, {
         contactInfo: contactData,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date(),
       });
       console.log("Successfully updated assessment with contact info");
 

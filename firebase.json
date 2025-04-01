@@ -4,17 +4,20 @@
   },
   "emulators": {
     "functions": {
-      "port": "5002"
+      "port": "5002",
+      "enabled": false
     },
     "ui": {
-      "enabled": true,
+      "enabled": false,
       "port": "4002"
     },
     "hub": {
-      "port": "4402"
+      "port": "4402",
+      "enabled": false
     },
     "logging": {
-      "port": "4502"
+      "port": "4502",
+      "enabled": false
     }
   }
 }
